@@ -2,5 +2,8 @@ module Error             ( Error(..) ) where
 
 import Control.Exception ( Exception )
 
-newtype Error = Error String deriving (Show, Eq)
+data Error = HelpError
+           | TooManyArgumentsError
+           | TooFewArgumentsError
+           deriving (Show, Eq)
 instance Exception Error

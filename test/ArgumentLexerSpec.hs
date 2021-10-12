@@ -4,8 +4,8 @@ import Test.Hspec        ( Spec
                          , it
                          , shouldBe )
 
-import ArgumentLexer ( Token(..)
-                     , tokenizeArgs )
+import ArgumentLexer     ( Token(..)
+                         , tokenizeArgs )
 
 spec :: Spec
 spec = do
