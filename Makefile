@@ -36,5 +36,5 @@ tests_run:
 .PHONY:	tests_run
 
 coverage:
-	google-chrome-stable $(COVERAGE_PATH)/index.html
+	firefox $(COVERAGE_PATH)/index.html
 .PHONY:	coverage
