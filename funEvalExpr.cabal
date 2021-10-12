@@ -25,7 +25,9 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      ArgumentLexer
+      ArgumentParser
+      Error
   other-modules:
       Paths_funEvalExpr
   hs-source-dirs:
@@ -50,6 +52,7 @@ test-suite funEvalExpr-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      ArgumentLexerSpec
       Paths_funEvalExpr
   hs-source-dirs:
       test
@@ -57,4 +60,5 @@ test-suite funEvalExpr-test
   build-depends:
       base >=4.7 && <5
     , funEvalExpr
+    , hspec
   default-language: Haskell2010
