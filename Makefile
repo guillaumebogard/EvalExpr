@@ -18,6 +18,10 @@ all:
 	cp $(BINARY_PATH)/bin/$(STACK_NAME)-exe ./$(NAME)
 .PHONY:	all
 
+debug:
+	stack ghci
+.PHONY:	debug
+
 clean:
 	stack clean
 .PHONY:	clean

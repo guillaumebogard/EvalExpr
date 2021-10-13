@@ -5,5 +5,5 @@ import Control.Exception ( Exception )
 data Error = HelpError
            | TooManyArgumentsError
            | TooFewArgumentsError
-           deriving (Show, Eq)
+           | InvalidExpressionError deriving (Show, Eq)
 instance Exception Error
