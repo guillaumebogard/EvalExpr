@@ -19,5 +19,5 @@ parseTokenizedArgs [EXPRESSION x] = Expression x
 parseTokenizedArgs (HELP:_)       = throw HelpError
 parseTokenizedArgs []             = throw TooFewArgumentsError
 parseTokenizedArgs ((EXPRESSION _):xs)
-    | HELP `elem` xs              = throw HelpError 
+    | HELP `elem` xs              = throw HelpError
     | otherwise                   = throw TooManyArgumentsError

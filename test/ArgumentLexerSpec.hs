@@ -9,6 +9,7 @@ import ArgumentLexer     ( Token(..)
 
 spec :: Spec
 spec = do
+    it "[tokenizeArgs]: One short help flag" $ tokenizeArgs []            `shouldBe` []
     it "[tokenizeArgs]: One short help flag" $ tokenizeArgs ["-h"]        `shouldBe` [HELP]
     it "[tokenizeArgs]: One long help flag"  $ tokenizeArgs ["--help"]    `shouldBe` [HELP]
     it "[tokenizeArgs]: One expression"      $ tokenizeArgs ["(3*5)+2"]   `shouldBe` [EXPRESSION "(3*5)+2"]

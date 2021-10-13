@@ -28,6 +28,9 @@ library
       ArgumentLexer
       ArgumentParser
       Error
+      ExpressionEvaluate
+      ExpressionLexer
+      ExpressionParser
   other-modules:
       Paths_funEvalExpr
   hs-source-dirs:
@@ -54,6 +57,7 @@ test-suite funEvalExpr-test
   other-modules:
       ArgumentLexerSpec
       ArgumentParserSpec
+      ExpressionLexerSpec
       Paths_funEvalExpr
   hs-source-dirs:
       test
