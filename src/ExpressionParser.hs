@@ -63,11 +63,11 @@ getSubtokens (EL.OPENED_PARENTHESIS:xs) = getSubtokensMatch ([], xs) 0
 getSubtokens _                          = throw $ InvalidExpressionError "Trying to parse subexpression without opened parenthesis at its start"
 
 getSubtokensMatch :: ([Token], [Token]) -> Int -> ([Token], [Token])
-getSubtokensMatch (subtokens, EL.CLOSED_PARENTHESIS:xs) 0        = (reverse subtokens, xs)
+getSubtokensMatch (subtokens, EL.CLOSED_PARENTHESIS:xs) 0       = (reverse subtokens, xs)
 getSubtokensMatch (subtokens, EL.CLOSED_PARENTHESIS:xs) nbMatch = getSubtokensMatch (EL.CLOSED_PARENTHESIS:subtokens, xs) $ nbMatch - 1
 getSubtokensMatch (subtokens, EL.OPENED_PARENTHESIS:xs) nbMatch = getSubtokensMatch (EL.OPENED_PARENTHESIS:subtokens, xs) $ nbMatch + 1
 getSubtokensMatch (subtokens, x:xs)                     nbMatch = getSubtokensMatch (x:subtokens, xs) nbMatch
-getSubtokensMatch (_, [])                               _        = throw $ InvalidExpressionError "Mismatched parentheses"
+getSubtokensMatch (_, [])                               _       = throw $ InvalidExpressionError "Mismatched parentheses"
 
 tokenToBinaryOp :: Token -> BinaryOperator
 tokenToBinaryOp EL.ADDITION       = ExpressionParser.ADDITION
