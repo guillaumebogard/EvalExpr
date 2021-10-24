@@ -4,7 +4,7 @@ module ArgumentLexer ( Token(..)
 
 data Token = HELP
            | EXPRESSION String
-           deriving (Show, Eq)
+           deriving Eq
 
 tokenizeArgs :: [String] -> [Token]
 tokenizeArgs []            = []

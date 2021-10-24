@@ -3,7 +3,8 @@ module Error             ( Error(..) ) where
 import Control.Exception ( Exception )
 
 data Error = HelpError
-           | TooManyArgumentsError
-           | TooFewArgumentsError
-           | InvalidExpressionError deriving (Show, Eq)
+           | ArgumentParserError String
+           | InvalidExpressionError String
+           | ExpressionEvaluationError String
+           deriving Show
 instance Exception Error

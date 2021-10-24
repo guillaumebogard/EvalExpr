@@ -1,15 +1,15 @@
-module ArgumentParser ( Expression(..)
-                      , parseArgs
-                      ) where
+module ArgumentParser    ( Expression(..)
+                         , parseArgs
+                         ) where
 
 import Control.Exception ( throw )
 
-import Error          ( Error(..) )
+import Error             ( Error(HelpError, ArgumentParserError) )
 
-import ArgumentLexer  ( Token(..)
-                      , tokenizeArgs)
+import ArgumentLexer     ( Token(..)
+                         , tokenizeArgs )
 
-newtype Expression = Expression String deriving (Show, Eq)
+newtype Expression = Expression String
 
 parseArgs :: [String] -> Expression
 parseArgs = parseTokenizedArgs . tokenizeArgs
@@ -17,7 +17,7 @@ parseArgs = parseTokenizedArgs . tokenizeArgs
 parseTokenizedArgs :: [Token] -> Expression
 parseTokenizedArgs [EXPRESSION x] = Expression x
 parseTokenizedArgs (HELP:_)       = throw HelpError
-parseTokenizedArgs []             = throw TooFewArgumentsError
+parseTokenizedArgs []             = throw $ ArgumentParserError "Too few arguments"
 parseTokenizedArgs ((EXPRESSION _):xs)
     | HELP `elem` xs              = throw HelpError
-    | otherwise                   = throw TooManyArgumentsError
+    | otherwise                   = throw $ ArgumentParserError "Too many arguments"
