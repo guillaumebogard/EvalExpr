@@ -30,65 +30,59 @@ parseExpression :: Expression -> ExpressionTree
 parseExpression = parseTokenizedExpression . tokenizeExpression
 
 parseTokenizedExpression :: [Token] -> ExpressionTree
-parseTokenizedExpression = uncurry loopOverTokens . endTree
+parseTokenizedExpression = uncurry newPrioToTree . newNonprioToTree
 
-loopOverTokens :: [Token] -> ExpressionTree -> ExpressionTree
-loopOverTokens [] tree                                  = tree
-loopOverTokens (x:xs)   node@(Leaf _)                   = binaryNodeAndLoop (endTree xs) x node
-loopOverTokens (x:xs)   node@(UnaryNode _ _)            = binaryNodeAndLoop (endTree xs) x node
-loopOverTokens (x:xs)   node@(ProtectedNode _)          = binaryNodeAndLoop (endTree xs) x node
-loopOverTokens (op:xs) node@BinaryNode {}          = let (rest, new) = endTree xs in loopOverTokens rest $ placeTokenInTree node op new
+newPrioToTree :: [Token] -> ExpressionTree -> ExpressionTree
+newPrioToTree []           finalTree             = finalTree
+newPrioToTree (tokenOp:xs) tree@Leaf {}          = let (rest, secondTree) = newNonprioToTree xs in newPrioToTree rest $ BinaryNode (tokenToBinaryOp tokenOp) tree secondTree
+newPrioToTree (tokenOp:xs) tree@ProtectedNode {} = let (rest, secondTree) = newNonprioToTree xs in newPrioToTree rest $ BinaryNode (tokenToBinaryOp tokenOp) tree secondTree
+newPrioToTree (tokenOp:xs) tree@UnaryNode {}     = let (rest, secondTree) = newNonprioToTree xs in newPrioToTree rest $ BinaryNode (tokenToBinaryOp tokenOp) tree secondTree
+newPrioToTree (op:xs)      tree@BinaryNode {}    = let (rest, secondTree) = newNonprioToTree xs in newPrioToTree rest $ placeBinaryOpTokenInTree tree op secondTree
 
-binaryNodeAndLoop :: ([Token], ExpressionTree) -> Token -> ExpressionTree -> ExpressionTree
-binaryNodeAndLoop (rest, new) x node = loopOverTokens rest $ BinaryNode (tokenToOp x) node new
+placeBinaryOpTokenInTree :: ExpressionTree -> Token -> ExpressionTree -> ExpressionTree
+placeBinaryOpTokenInTree base@(Leaf _)                   tokenOp tree = BinaryNode (tokenToBinaryOp tokenOp) base tree
+placeBinaryOpTokenInTree base@(ProtectedNode _)          tokenOp tree = BinaryNode (tokenToBinaryOp tokenOp) base tree
+placeBinaryOpTokenInTree base@(UnaryNode _ _)            tokenOp tree = BinaryNode (tokenToBinaryOp tokenOp) base tree
+placeBinaryOpTokenInTree base@(BinaryNode op left right) tokenOp tree
+  | isBinaryOpHigherPrio (tokenToBinaryOp tokenOp) op                 = BinaryNode op left $ placeBinaryOpTokenInTree right tokenOp tree
+  | otherwise                                                         = BinaryNode (tokenToBinaryOp tokenOp) base tree
 
-placeTokenInTree :: ExpressionTree -> Token -> ExpressionTree -> ExpressionTree
-placeTokenInTree base@(BinaryNode op left right) newOp tree
-  | isLessPrio (tokenToOp newOp) op                = BinaryNode (tokenToOp newOp) base tree
-  | otherwise                                      = BinaryNode op left $ placeTokenInTree right newOp tree
-placeTokenInTree base@(Leaf _) newOp tree          = BinaryNode (tokenToOp newOp) base tree
-placeTokenInTree base@(UnaryNode _ _) newOp tree   = BinaryNode (tokenToOp newOp) base tree
-placeTokenInTree base@(ProtectedNode _) newOp tree = BinaryNode (tokenToOp newOp) base tree
+newNonprioToTree :: [Token] -> ([Token], ExpressionTree)
+newNonprioToTree (EL.OPERAND operand:xs)          = (xs, Leaf operand)
+newNonprioToTree (EL.ADDITION:xs)                 = wrapTreeAroundUnaryNode (newNonprioToTree xs) ExpressionParser.PLUS
+newNonprioToTree (EL.SUBSTRACTION:xs)             = wrapTreeAroundUnaryNode (newNonprioToTree xs) ExpressionParser.MINUS
+newNonprioToTree tokens@(EL.OPENED_PARENTHESIS:_) = let (expr, rest) = getSubtokens tokens in (rest, ProtectedNode $ parseTokenizedExpression expr)
+newNonprioToTree (EL.CLOSED_PARENTHESIS:_)        = throw $ InvalidExpressionError "Mismatched parentheses"
+newNonprioToTree _                                = throw $ InvalidExpressionError "An operator is missing (an) operand(s)"
 
-endTree :: [Token] -> ([Token], ExpressionTree)
-endTree (EL.OPERAND operand:xs)     = (xs, Leaf operand)
-endTree (EL.SUBSTRACTION:xs)        = makeEndTreeTuple (endTree xs) MINUS
-endTree (EL.ADDITION:xs)            = makeEndTreeTuple (endTree xs) PLUS
-endTree list@(OPENED_PARENTHESIS:_) = let (expression, rest) = unwrapExpression list in (rest, ProtectedNode $ parseTokenizedExpression expression)
-endTree _                           = throw $ InvalidExpressionError "An operator is missing (an) operand(s)"
+wrapTreeAroundUnaryNode :: ([Token], ExpressionTree) -> UnaryOperator -> ([Token], ExpressionTree)
+wrapTreeAroundUnaryNode (rest, tree) operator = (rest, UnaryNode operator tree)
 
-makeEndTreeTuple :: ([Token], ExpressionTree) -> UnaryOperator -> ([Token], ExpressionTree)
-makeEndTreeTuple (rest, tree) MINUS = (rest, UnaryNode MINUS tree)
-makeEndTreeTuple (rest, tree) PLUS  = (rest, UnaryNode PLUS tree)
+getSubtokens :: [Token] -> ([Token], [Token])
+getSubtokens (EL.OPENED_PARENTHESIS:xs) = getSubtokensMatch ([], xs) 0
+getSubtokens _                          = throw $ InvalidExpressionError "Trying to parse subexpression without opened parenthesis at its start"
 
-tokenToOp :: Token -> BinaryOperator
-tokenToOp EL.ADDITION       = ExpressionParser.ADDITION
-tokenToOp EL.SUBSTRACTION   = ExpressionParser.SUBSTRACTION
-tokenToOp EL.MULTIPLICATION = ExpressionParser.MULTIPLICATION
-tokenToOp EL.DIVISION       = ExpressionParser.DIVISION
-tokenToOp EL.POWER          = ExpressionParser.POWER
-tokenToOp _                 = throw $ InvalidExpressionError "Invalid syntax"
+getSubtokensMatch :: ([Token], [Token]) -> Int -> ([Token], [Token])
+getSubtokensMatch (subtokens, EL.CLOSED_PARENTHESIS:xs) 0        = (reverse subtokens, xs)
+getSubtokensMatch (subtokens, EL.CLOSED_PARENTHESIS:xs) nb_match = getSubtokensMatch (EL.CLOSED_PARENTHESIS:subtokens, xs) $ nb_match - 1
+getSubtokensMatch (subtokens, EL.OPENED_PARENTHESIS:xs) nb_match = getSubtokensMatch (EL.OPENED_PARENTHESIS:subtokens, xs) $ nb_match + 1
+getSubtokensMatch (subtokens, x:xs)                     nb_match = getSubtokensMatch (x:subtokens, xs) nb_match
+getSubtokensMatch (_, [])                               _        = throw $ InvalidExpressionError "Mismatched parentheses"
 
-isLessPrio :: BinaryOperator -> BinaryOperator -> Bool
-isLessPrio left right
-  | getPrio left <= getPrio right   = True
-  | otherwise                       = False
+tokenToBinaryOp :: Token -> BinaryOperator
+tokenToBinaryOp EL.ADDITION       = ExpressionParser.ADDITION
+tokenToBinaryOp EL.SUBSTRACTION   = ExpressionParser.SUBSTRACTION
+tokenToBinaryOp EL.MULTIPLICATION = ExpressionParser.MULTIPLICATION
+tokenToBinaryOp EL.DIVISION       = ExpressionParser.DIVISION
+tokenToBinaryOp EL.POWER          = ExpressionParser.POWER
+tokenToBinaryOp _                 = throw $ InvalidExpressionError "Cannot convert Token to BinaryOperator"
 
-getPrio :: BinaryOperator -> Int
-getPrio ExpressionParser.ADDITION       = 1
-getPrio ExpressionParser.SUBSTRACTION   = 1
-getPrio ExpressionParser.MULTIPLICATION = 2
-getPrio ExpressionParser.DIVISION       = 2
-getPrio ExpressionParser.POWER          = 3
+isBinaryOpHigherPrio :: BinaryOperator -> BinaryOperator -> Bool
+isBinaryOpHigherPrio left right = getBinaryOpPrio left > getBinaryOpPrio right
 
-unwrapExpression :: [Token] -> ([Token], [Token])
-unwrapExpression (OPENED_PARENTHESIS:xs)  = postUnwrapExpression ([], xs) 0
-unwrapExpression []                     = throw $ InvalidExpressionError "empty parenthesis are not allowed."
-unwrapExpression _                      = throw $ InvalidExpressionError "Invalid syntax (unwrapExpression)"
-
-postUnwrapExpression :: ([Token], [Token]) -> Int -> ([Token], [Token])
-postUnwrapExpression (left, CLOSED_PARENTHESIS:xs) 0       = (reverse left, xs)
-postUnwrapExpression (left, x@CLOSED_PARENTHESIS:xs) count   = postUnwrapExpression (x:left, xs) $ count - 1
-postUnwrapExpression (left, x@OPENED_PARENTHESIS:xs) count    = postUnwrapExpression (x:left, xs) $ count + 1
-postUnwrapExpression (left, x:xs) count                     = postUnwrapExpression (x:left, xs) count
-postUnwrapExpression (_, _) _                               = throw $ InvalidExpressionError "invalidSyntax (postUnwrapExpression)"
+getBinaryOpPrio :: BinaryOperator -> Int
+getBinaryOpPrio ExpressionParser.ADDITION       = 1
+getBinaryOpPrio ExpressionParser.SUBSTRACTION   = 1
+getBinaryOpPrio ExpressionParser.MULTIPLICATION = 2
+getBinaryOpPrio ExpressionParser.DIVISION       = 2
+getBinaryOpPrio ExpressionParser.POWER          = 3

@@ -22,5 +22,5 @@ evaluateExpressionTree (BinaryNode EP.POWER          left right) = evaluateExpre
 
 evaluateExpressionTreeDivision :: OperandType -> OperandType -> OperandType
 evaluateExpressionTreeDivision left right
-  | right == 0  = throw $ ExpressionEvaluationError "Forbidden operation: Division by zero"
-  | otherwise   = left / right
+  | right == 0 = throw $ ExpressionEvaluationError "Forbidden operation: Division by zero"
+  | otherwise  = left / right
