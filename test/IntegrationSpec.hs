@@ -3,8 +3,6 @@ module IntegrationSpec        ( spec ) where
 import Test.Hspec             ( Spec
                               , it )
 
-import Control.Exception      ( evaluate )
-
 import ArgumentParser         ( Expression(..)
                               , parseArgs )
 import ExpressionLexer        ( OperandType )

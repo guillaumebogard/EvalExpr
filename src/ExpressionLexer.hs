@@ -24,7 +24,6 @@ data Token = ADDITION
 
 tokenizeExpression :: Expression -> [Token]
 tokenizeExpression (Expression [])       = []
-tokenizeExpression (Expression (' ':xs)) = tokenizeExpression $ Expression xs
 tokenizeExpression (Expression ('+':xs)) = ADDITION           : tokenizeExpression (Expression xs)
 tokenizeExpression (Expression ('-':xs)) = SUBSTRACTION       : tokenizeExpression (Expression xs)
 tokenizeExpression (Expression ('*':xs)) = MULTIPLICATION     : tokenizeExpression (Expression xs)
@@ -51,7 +50,6 @@ getOperand expr = getOperand' expr $ Expression ""
 
 getOperand' :: Expression -> Expression -> (Expression, Expression)
 getOperand' (Expression [])            number = (number, Expression [])
-getOperand' expr@(Expression (' ':_))  number = (number, expr)
 getOperand' expr@(Expression ('+':_))  number = (number, expr)
 getOperand' expr@(Expression ('-':_))  number = (number, expr)
 getOperand' expr@(Expression ('*':_))  number = (number, expr)
