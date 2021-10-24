@@ -49,14 +49,14 @@ getOperand :: Expression -> (Expression, Expression)
 getOperand expr = getOperand' expr $ Expression ""
 
 getOperand' :: Expression -> Expression -> (Expression, Expression)
-getOperand' (Expression [])            number = (number, Expression [])
-getOperand' expr@(Expression ('+':_))  number = (number, expr)
-getOperand' expr@(Expression ('-':_))  number = (number, expr)
-getOperand' expr@(Expression ('*':_))  number = (number, expr)
-getOperand' expr@(Expression ('/':_))  number = (number, expr)
-getOperand' expr@(Expression ('^':_))  number = (number, expr)
-getOperand' expr@(Expression ('(':_))  number = (number, expr)
-getOperand' expr@(Expression (')':_))  number = (number, expr)
-getOperand' expr@(Expression (x:xs))   number
+getOperand' (Expression [])           number = (number, Expression [])
+getOperand' expr@(Expression ('+':_)) number = (number, expr)
+getOperand' expr@(Expression ('-':_)) number = (number, expr)
+getOperand' expr@(Expression ('*':_)) number = (number, expr)
+getOperand' expr@(Expression ('/':_)) number = (number, expr)
+getOperand' expr@(Expression ('^':_)) number = (number, expr)
+getOperand' expr@(Expression ('(':_)) number = (number, expr)
+getOperand' expr@(Expression (')':_)) number = (number, expr)
+getOperand' expr@(Expression (x:xs))  number
     | isSpace x = (number, expr)
     | otherwise = let (Expression number', xs') = getOperand' (Expression xs) number in (Expression (x:number'), xs')

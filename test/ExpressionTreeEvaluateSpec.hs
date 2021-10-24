@@ -1,12 +1,12 @@
 module ExpressionTreeEvaluateSpec ( spec ) where
 
-import Test.Hspec             ( Spec
-                              , it )
+import Test.Hspec                 ( Spec
+                                  , it )
 
-import ExpressionParser as EP ( UnaryOperator(..)
-                              , BinaryOperator(..)
-                              , ExpressionTree(..) )
-import ExpressionTreeEvaluate ( evaluateExpressionTree )
+import ExpressionParser as EP     ( UnaryOperator(..)
+                                  , BinaryOperator(..)
+                                  , ExpressionTree(..) )
+import ExpressionTreeEvaluate     ( evaluateExpressionTree )
 
 spec :: Spec
 spec = do
