@@ -10,7 +10,7 @@ import ExpressionParser as EP ( UnaryOperator(..)
                               , ExpressionTree(..) )
 
 evaluateExpressionTree :: ExpressionTree -> OperandType
-evaluateExpressionTree (Leaf operand)                            = operand
+evaluateExpressionTree (Leaf                         operand)    = operand
 evaluateExpressionTree (ProtectedNode                subtree)    = evaluateExpressionTree subtree
 evaluateExpressionTree (UnaryNode  EP.PLUS           subtree)    = evaluateExpressionTree subtree
 evaluateExpressionTree (UnaryNode  EP.MINUS          subtree)    = -(evaluateExpressionTree subtree)
