@@ -1,18 +1,14 @@
-module Main                ( main ) where
+module Main                 ( main ) where
 
-import Test.Hspec          ( hspec
-                           , Spec
-                           , describe )
+import Test.Hspec           ( hspec
+                            , Spec
+                            , describe )
 
-import ArgumentLexerSpec   ( spec )
-import ArgumentParserSpec  ( spec )
-import ExpressionLexerSpec ( spec )
-
-spec :: Spec
-spec = do
-    describe "ArgumentLexer"   ArgumentLexerSpec.spec
-    describe "ArgumentParser"  ArgumentParserSpec.spec
-    describe "ExpressionLexer" ExpressionLexerSpec.spec
+import IntegrationSpec      ( spec )
 
 main :: IO ()
 main = hspec Main.spec
+
+spec :: Spec
+spec = do
+    describe "Integration"      IntegrationSpec.spec

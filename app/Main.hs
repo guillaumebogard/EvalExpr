@@ -1,23 +1,30 @@
-module Main               ( main ) where
+module Main                   ( main ) where
 
-import Control.Exception  ( handle )
-import System.Environment ( getArgs )
-import System.Exit        ( ExitCode(ExitFailure)
-                          , exitWith
-                          , exitSuccess )
+import Control.Exception      ( handle )
+import System.Environment     ( getArgs )
+import System.Exit            ( ExitCode(ExitFailure)
+                              , exitWith
+                              , exitSuccess )
+import Text.Printf            ( printf )
 
-import ArgumentParser     ( Expression(..)
-                          , parseArgs )
-import Error              ( Error(..) )
+import Error                  ( Error(..) )
+
+import ArgumentParser         ( Expression(..)
+                              , parseArgs )
+import ExpressionParser       ( parseExpression )
+import ExpressionTreeEvaluate ( evaluateExpressionTree )
 
 main :: IO ()
-main = handle handleErrors (getArgs >>= launchApp . parseArgs)
+main = handle handleError (getArgs >>= launchApp . parseArgs)
 
 launchApp :: Expression -> IO ()
-launchApp _ = putStrLn "Right Conf"
+launchApp = printf "%.2f\n" . evaluateExpressionTree . parseExpression 
 
-handleErrors :: Error -> IO ()
-handleErrors HelpError              = putStrLn "Usage" >> exitSuccess
-handleErrors TooManyArgumentsError  = putStrLn "Too Many Arguments" >> exitWith (ExitFailure 84)
-handleErrors TooFewArgumentsError   = putStrLn "Too Few Arguments" >> exitWith (ExitFailure 84)
-handleErrors InvalidExpressionError = putStrLn "Invalid Expression" >> exitWith (ExitFailure 84)
+handleError :: Error -> IO ()
+handleError HelpError                           = putStrLn usage   >> exitSuccess
+handleError (ArgumentParserError       message) = putStrLn message >> exitWith (ExitFailure 84)
+handleError (InvalidExpressionError    message) = putStrLn message >> exitWith (ExitFailure 84)
+handleError (ExpressionEvaluationError message) = putStrLn message >> exitWith (ExitFailure 84)
+
+usage :: String
+usage = "USAGE: ./funEvalExpr expression\n\n\texpression\tA mathematical expression to be evaluated"

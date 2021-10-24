@@ -28,9 +28,9 @@ library
       ArgumentLexer
       ArgumentParser
       Error
-      ExpressionEvaluate
       ExpressionLexer
       ExpressionParser
+      ExpressionTreeEvaluate
   other-modules:
       Paths_funEvalExpr
   hs-source-dirs:
@@ -55,9 +55,7 @@ test-suite funEvalExpr-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      ArgumentLexerSpec
-      ArgumentParserSpec
-      ExpressionLexerSpec
+      IntegrationSpec
       Paths_funEvalExpr
   hs-source-dirs:
       test
