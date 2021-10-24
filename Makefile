@@ -18,6 +18,10 @@ all:
 	cp $(BINARY_PATH)/bin/$(STACK_NAME)-exe ./$(NAME)
 .PHONY:	all
 
+debug:
+	stack ghci
+.PHONY:	debug
+
 clean:
 	stack clean
 .PHONY:	clean
@@ -36,5 +40,5 @@ tests_run:
 .PHONY:	tests_run
 
 coverage:
-	google-chrome-stable $(COVERAGE_PATH)/index.html
+	firefox $(COVERAGE_PATH)/index.html
 .PHONY:	coverage
