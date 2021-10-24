@@ -1,4 +1,4 @@
-module ArgumentParserSpec where
+module ArgumentParserSpec   ( spec ) where
 
 import Test.Hspec           ( Spec
                             , it )
