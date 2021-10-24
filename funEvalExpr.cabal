@@ -55,6 +55,11 @@ test-suite funEvalExpr-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      ArgumentLexerSpec
+      ArgumentParserSpec
+      ExpressionLexerSpec
+      ExpressionParserSpec
+      ExpressionTreeEvaluateSpec
       IntegrationSpec
       Paths_funEvalExpr
   hs-source-dirs:
