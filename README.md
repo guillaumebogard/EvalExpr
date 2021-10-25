@@ -1,6 +1,6 @@
 # 🟣 FUN - EvalExpr
 
-![Stack CI workflow](https://github.com/EpitechPromo2024/B-FUN-500-BDX-5-1-funEvalExpr-guillaume.bogard-coquard/actions/workflows/main.yml/badge.svg)
+![Stack CI workflow](https://github.com/guillaumebgd/EvalExpr/actions/workflows/main.yml/badge.svg)
 
 # Description
 
