@@ -25,12 +25,16 @@ source-repository head
 
 library
   exposed-modules:
-      ArgumentLexer
-      ArgumentParser
-      Error
-      ExpressionLexer
-      ExpressionParser
-      ExpressionTreeEvaluate
+      Argument.Lexer
+      Argument.Parser
+      Argument.Parser.Exception
+      Expression.Display
+      Expression.Evaluation
+      Expression.Evaluation.Exception
+      Expression.Lexer
+      Expression.Lexer.Exception
+      Expression.Parser
+      Expression.Parser.Exception
   other-modules:
       Paths_funEvalExpr
   hs-source-dirs:
@@ -55,12 +59,11 @@ test-suite funEvalExpr-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      ArgumentLexerSpec
-      ArgumentParserSpec
-      ExpressionLexerSpec
-      ExpressionParserSpec
-      ExpressionTreeEvaluateSpec
-      IntegrationSpec
+      Argument.Lexer.Spec
+      Argument.Parser.Spec
+      Expression.Evaluation.Spec
+      Expression.Lexer.Spec
+      Expression.Parser.Spec
       Paths_funEvalExpr
   hs-source-dirs:
       test
