@@ -1,24 +1,29 @@
-module Main                       ( main ) where
+--
+-- EvalExpr
+-- File description:
+-- Spec
+--
 
-import Test.Hspec                 ( hspec
-                                  , Spec
-                                  , describe )
+module Main                                      ( main ) where
 
-import ArgumentLexerSpec          ( spec )
-import ArgumentParserSpec         ( spec )
-import ExpressionLexerSpec        ( spec )
-import ExpressionParserSpec       ( spec )
-import ExpressionTreeEvaluateSpec ( spec )
-import IntegrationSpec            ( spec )
+import qualified Test.Hspec               as TH  ( Spec
+                                                 , hspec
+                                                 , describe
+                                                 )
+
+import qualified Argument.LexerSpec        as ALS ( spec )
+import qualified Argument.ParserSpec       as APS ( spec )
+import qualified Expression.LexerSpec      as ELS ( spec )
+import qualified Expression.ParserSpec     as EPS ( spec )
+import qualified Expression.EvaluationSpec as EES ( spec )
 
 main :: IO ()
-main = hspec Main.spec
+main = TH.hspec Main.spec
 
-spec :: Spec
+spec :: TH.Spec
 spec = do
-    describe "ArgumentLexer"          ArgumentLexerSpec.spec
-    describe "ArgumentParser"         ArgumentParserSpec.spec
-    describe "ExpressionLexer"        ExpressionLexerSpec.spec
-    describe "ExpressionParser"       ExpressionParserSpec.spec
-    describe "ExpressionTreeEvaluate" ExpressionTreeEvaluateSpec.spec
-    describe "Integration"            IntegrationSpec.spec
+    TH.describe "Argument.Lexer"        ALS.spec
+    TH.describe "Argument.Parser"       APS.spec
+    TH.describe "Expression.Lexer"      ELS.spec
+    TH.describe "Expression.Parser"     EPS.spec
+    TH.describe "Expression.Evaluation" EES.spec
