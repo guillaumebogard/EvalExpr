@@ -1,10 +1,10 @@
 --
 -- EvalExpr
 -- File description:
--- Argument.Lexer.Spec
+-- Argument.LexerSpec
 --
 
-module Argument.Lexer.Spec            ( spec ) where
+module Argument.LexerSpec             ( spec ) where
 
 import qualified Test.Hspec     as TH ( Spec
                                       , it

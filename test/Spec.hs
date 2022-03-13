@@ -4,18 +4,18 @@
 -- Spec
 --
 
-module Main                                        ( main ) where
+module Main                                      ( main ) where
 
-import qualified Test.Hspec                 as TH  ( Spec
-                                                   , hspec
-                                                   , describe
-                                                   )
+import qualified Test.Hspec               as TH  ( Spec
+                                                 , hspec
+                                                 , describe
+                                                 )
 
-import qualified Argument.Lexer.Spec        as ALS ( spec )
-import qualified Argument.Parser.Spec       as APS ( spec )
-import qualified Expression.Lexer.Spec      as ELS ( spec )
-import qualified Expression.Parser.Spec     as EPS ( spec )
-import qualified Expression.Evaluation.Spec as EES ( spec )
+import qualified Argument.LexerSpec        as ALS ( spec )
+import qualified Argument.ParserSpec       as APS ( spec )
+import qualified Expression.LexerSpec      as ELS ( spec )
+import qualified Expression.ParserSpec     as EPS ( spec )
+import qualified Expression.EvaluationSpec as EES ( spec )
 
 main :: IO ()
 main = TH.hspec Main.spec

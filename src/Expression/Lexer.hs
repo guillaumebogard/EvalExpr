@@ -41,7 +41,8 @@ tokenize      (AP.Expression      (')':xs)) = ClosedParenthesis : tokenize (AP.E
 tokenize      (AP.Expression      ('.':xs)) = uncurry addTokenAndContinueTokenize $ tokenizeAfterDot $ AP.Expression xs
 tokenize expr@(AP.Expression      (x  :xs))
     | isSpace   x                           = tokenize $ AP.Expression xs
-    | otherwise                             = uncurry addTokenAndContinueTokenize $ tokenizeOperand expr
+    | isDigit   x                           = uncurry addTokenAndContinueTokenize $ tokenizeOperand expr
+    | otherwise                             = throw $ ELE.ExpressionLexerException $ "Unrecognized token: '" ++ x : "'"
 
 addTokenAndContinueTokenize :: Token -> AP.Expression -> [Token]
 addTokenAndContinueTokenize token rest = token : tokenize rest

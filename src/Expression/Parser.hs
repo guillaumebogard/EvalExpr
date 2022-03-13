@@ -4,13 +4,13 @@
 -- Expression.Parser
 --
 
-module Expression.Parser                ( UnaryOperator(..)
-                                        , BinaryOperator(..)
-                                        , ExpressionTree(..)
-                                        , parse
-                                        ) where
+module Expression.Parser                            ( UnaryOperator(..)
+                                                    , BinaryOperator(..)
+                                                    , ExpressionTree(..)
+                                                    , parse
+                                                    ) where
 
-import GHC.Exception                    ( throw )
+import GHC.Exception                                ( throw )
 
 import qualified Argument.Parser             as AP  ( Expression(..) )
 import qualified Expression.Lexer            as EL  ( Token(..)
@@ -40,44 +40,47 @@ parse :: AP.Expression -> ExpressionTree
 parse = parseTokens . EL.tokenize
 
 parseTokens :: [EL.Token] -> ExpressionTree
-parseTokens = uncurry newPrioToTree . newNonprioToTree
+parseTokens = uncurry handleNewExpressionTreeFromLeft . getExpressionTreeFromLeft
 
-newPrioToTree :: [EL.Token] -> ExpressionTree -> ExpressionTree
-newPrioToTree []           finalTree             = finalTree
-newPrioToTree (tokenOp:xs) tree@Leaf          {} = let (rest, secondTree) = newNonprioToTree xs in newPrioToTree rest $ BinaryNode (tokenToBinaryOp tokenOp) tree secondTree
-newPrioToTree (tokenOp:xs) tree@ProtectedNode {} = let (rest, secondTree) = newNonprioToTree xs in newPrioToTree rest $ BinaryNode (tokenToBinaryOp tokenOp) tree secondTree
-newPrioToTree (tokenOp:xs) tree@UnaryNode     {} = let (rest, secondTree) = newNonprioToTree xs in newPrioToTree rest $ BinaryNode (tokenToBinaryOp tokenOp) tree secondTree
-newPrioToTree (op:xs)      tree@BinaryNode    {} = let (rest, secondTree) = newNonprioToTree xs in newPrioToTree rest $ placeBinaryOpTokenInTree tree op secondTree
-
-placeBinaryOpTokenInTree :: ExpressionTree -> EL.Token -> ExpressionTree -> ExpressionTree
-placeBinaryOpTokenInTree base@(Leaf          _            ) tokenOp tree = BinaryNode (tokenToBinaryOp tokenOp) base tree
-placeBinaryOpTokenInTree base@(ProtectedNode _            ) tokenOp tree = BinaryNode (tokenToBinaryOp tokenOp) base tree
-placeBinaryOpTokenInTree base@(UnaryNode     _  _         ) tokenOp tree = BinaryNode (tokenToBinaryOp tokenOp) base tree
-placeBinaryOpTokenInTree base@(BinaryNode    op left right) tokenOp tree
-  | isBinaryOpHigherPrio (tokenToBinaryOp tokenOp) op                 = BinaryNode op left $ placeBinaryOpTokenInTree right tokenOp tree
-  | otherwise                                                         = BinaryNode (tokenToBinaryOp tokenOp) base tree
-
-newNonprioToTree :: [EL.Token] -> ([EL.Token], ExpressionTree)
-newNonprioToTree        (EL.Operand           op:xs) = (xs, Leaf op)
-newNonprioToTree        (EL.Addition            :xs) = wrapTreeAroundUnaryNode (newNonprioToTree xs) Plus
-newNonprioToTree        (EL.Substraction        :xs) = wrapTreeAroundUnaryNode (newNonprioToTree xs) Minus
-newNonprioToTree tokens@(EL.OpenedParenthesis   :_ ) = let (expr, rest) = getSubtokens tokens in (rest, ProtectedNode $ parseTokens expr)
-newNonprioToTree        (EL.ClosedParenthesis   :_ ) = throw $ EPE.ExpressionParserException "Mismatched parentheses"
-newNonprioToTree        _                            = throw $ EPE.ExpressionParserException "An operator is missing its operand(s)"
+getExpressionTreeFromLeft :: [EL.Token] -> ([EL.Token], ExpressionTree)
+getExpressionTreeFromLeft (EL.Operand           operand:xs) = (xs, Leaf operand)
+getExpressionTreeFromLeft (EL.Addition                 :xs) = wrapTreeAroundUnaryNode     (getExpressionTreeFromLeft xs) Plus
+getExpressionTreeFromLeft (EL.Substraction             :xs) = wrapTreeAroundUnaryNode     (getExpressionTreeFromLeft xs) Minus
+getExpressionTreeFromLeft (EL.OpenedParenthesis        :xs) = let (subtokens, rest) = getSubtokens xs in
+                                                              wrapTreeAroundProtectedNode (rest, parseTokens subtokens)
+getExpressionTreeFromLeft (EL.ClosedParenthesis        :_ ) = throw $ EPE.ExpressionParserException "Mismatched parentheses"
+getExpressionTreeFromLeft _                                 = throw $ EPE.ExpressionParserException "An operator is missing its operand(s)"
 
 wrapTreeAroundUnaryNode :: ([EL.Token], ExpressionTree) -> UnaryOperator -> ([EL.Token], ExpressionTree)
-wrapTreeAroundUnaryNode (rest, tree) operator = (rest, UnaryNode operator tree)
+wrapTreeAroundUnaryNode     (rest, tree) op = (rest, UnaryNode     op   tree)
+
+wrapTreeAroundProtectedNode :: ([EL.Token], ExpressionTree) -> ([EL.Token], ExpressionTree)
+wrapTreeAroundProtectedNode (rest, tree)    = (rest, ProtectedNode tree     )
 
 getSubtokens :: [EL.Token] -> ([EL.Token], [EL.Token])
-getSubtokens (EL.OpenedParenthesis:xs) = getSubtokensMatch ([], xs) 0
-getSubtokens _                         = throw $ EPE.ExpressionParserException "Trying to parse subexpression without opened parenthesis at its start"
+getSubtokens tokens = getSubtokens' ([], tokens) 0
 
-getSubtokensMatch :: ([EL.Token], [EL.Token]) -> Int -> ([EL.Token], [EL.Token])
-getSubtokensMatch (subtokens, EL.ClosedParenthesis:xs) 0       = (reverse subtokens, xs)
-getSubtokensMatch (subtokens, EL.ClosedParenthesis:xs) nbMatch = getSubtokensMatch (EL.OpenedParenthesis:subtokens, xs) $ nbMatch - 1
-getSubtokensMatch (subtokens, EL.OpenedParenthesis:xs) nbMatch = getSubtokensMatch (EL.OpenedParenthesis:subtokens, xs) $ nbMatch + 1
-getSubtokensMatch (subtokens, x:xs)                    nbMatch = getSubtokensMatch (x:subtokens, xs) nbMatch
-getSubtokensMatch (_, [])                              _       = throw $ EPE.ExpressionParserException "Mismatched parentheses"
+getSubtokens' :: ([EL.Token], [EL.Token]) -> Int -> ([EL.Token], [EL.Token])
+getSubtokens' (subtokens, EL.ClosedParenthesis:xs) 0       = (reverse subtokens, xs)
+getSubtokens' (subtokens, EL.ClosedParenthesis:xs) nbMatch = getSubtokens' (EL.ClosedParenthesis:subtokens, xs) $ nbMatch - 1
+getSubtokens' (subtokens, EL.OpenedParenthesis:xs) nbMatch = getSubtokens' (EL.OpenedParenthesis:subtokens, xs) $ nbMatch + 1
+getSubtokens' (subtokens, x:xs)                    nbMatch = getSubtokens' (x:subtokens, xs) nbMatch
+getSubtokens' (_, [])                              _       = throw $ EPE.ExpressionParserException "Mismatched parentheses"
+
+handleNewExpressionTreeFromLeft :: [EL.Token] -> ExpressionTree -> ExpressionTree
+handleNewExpressionTreeFromLeft (tokenOp:xs) tree@Leaf          {} = let (rest, secondTree) = getExpressionTreeFromLeft xs in handleNewExpressionTreeFromLeft rest $ BinaryNode (tokenToBinaryOp tokenOp) tree secondTree
+handleNewExpressionTreeFromLeft (tokenOp:xs) tree@ProtectedNode {} = let (rest, secondTree) = getExpressionTreeFromLeft xs in handleNewExpressionTreeFromLeft rest $ BinaryNode (tokenToBinaryOp tokenOp) tree secondTree
+handleNewExpressionTreeFromLeft (tokenOp:xs) tree@UnaryNode     {} = let (rest, secondTree) = getExpressionTreeFromLeft xs in handleNewExpressionTreeFromLeft rest $ BinaryNode (tokenToBinaryOp tokenOp) tree secondTree
+handleNewExpressionTreeFromLeft (op     :xs) tree@BinaryNode    {} = let (rest, secondTree) = getExpressionTreeFromLeft xs in handleNewExpressionTreeFromLeft rest $ placeBinaryOpTokenInTree tree op secondTree
+handleNewExpressionTreeFromLeft []                finalTree        = finalTree
+
+placeBinaryOpTokenInTree :: ExpressionTree -> EL.Token -> ExpressionTree -> ExpressionTree
+placeBinaryOpTokenInTree base@Leaf           {}             tokenOp tree = BinaryNode (tokenToBinaryOp tokenOp) base tree
+placeBinaryOpTokenInTree base@ProtectedNode  {}             tokenOp tree = BinaryNode (tokenToBinaryOp tokenOp) base tree
+placeBinaryOpTokenInTree base@UnaryNode      {}             tokenOp tree = BinaryNode (tokenToBinaryOp tokenOp) base tree
+placeBinaryOpTokenInTree base@(BinaryNode    op left right) tokenOp tree
+  | getBinaryOpPrio (tokenToBinaryOp tokenOp) > getBinaryOpPrio op       = BinaryNode op left $ placeBinaryOpTokenInTree right tokenOp tree
+  | otherwise                                                            = BinaryNode (tokenToBinaryOp tokenOp) base tree
 
 tokenToBinaryOp :: EL.Token -> BinaryOperator
 tokenToBinaryOp EL.Addition       = Addition
@@ -86,9 +89,6 @@ tokenToBinaryOp EL.Multiplication = Multiplication
 tokenToBinaryOp EL.Division       = Division
 tokenToBinaryOp EL.Power          = Power
 tokenToBinaryOp _                 = throw $ EPE.ExpressionParserException "Cannot convert Token to BinaryOperator"
-
-isBinaryOpHigherPrio :: BinaryOperator -> BinaryOperator -> Bool
-isBinaryOpHigherPrio left right = getBinaryOpPrio left > getBinaryOpPrio right
 
 getBinaryOpPrio :: BinaryOperator -> Int
 getBinaryOpPrio Addition       = 1

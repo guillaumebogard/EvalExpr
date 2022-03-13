@@ -12,7 +12,6 @@ import GHC.Exception              ( Exception )
 newtype ExpressionLexerException = ExpressionLexerException String
     deriving Eq
 
-
 instance Exception ExpressionLexerException
 
 instance Show      ExpressionLexerException where
