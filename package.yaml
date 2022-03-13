@@ -2,7 +2,7 @@ name:                funEvalExpr
 version:             0.1.0.0
 license:             BSD3
 author:              "Guillaume Bogard-Coquard"
-maintainer:          "guillaume.bogard-coquard@gmail.com"
+maintainer:          "guillaume.bogardcoquard@gmail.com"
 copyright:           "2022 Guillaume Bogard-Coquard"
 
 extra-source-files:

@@ -8,7 +8,7 @@ name:           funEvalExpr
 version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/guillaumebgd/EvalExpr/blob/master/README.md>
 author:         Guillaume Bogard-Coquard
-maintainer:     guillaume.bogard-coquard@gmail.com
+maintainer:     guillaume.bogardcoquard@gmail.com
 copyright:      2022 Guillaume Bogard-Coquard
 license:        BSD3
 license-file:   LICENSE
