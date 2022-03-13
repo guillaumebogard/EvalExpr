@@ -65,8 +65,8 @@ tokenizeOperand (AP.Expression expr) = tokenizeOperand' $ span isDigit expr
 tokenizeOperand' :: (String, String) -> (Token, AP.Expression)
 tokenizeOperand' (dp, '.':fp@(x2:_))
     | isDigit   x2           = uncurry (tokenizeOperand'' dp) $ span isDigit fp
-    | otherwise              = throw $ ELE.ExpressionLexerException $ "Incomplete operand ending by dot: '" ++ dp ++".'"
-tokenizeOperand' (dp, ['.']) = throw $ ELE.ExpressionLexerException $ "Incomplete operand ending by dot: '" ++ dp ++".'"
+    | otherwise              = throw $ ELE.ExpressionLexerException $ "Incomplete operand ending by dot: '" ++ dp ++ ".'"
+tokenizeOperand' (dp, ['.']) = throw $ ELE.ExpressionLexerException $ "Incomplete operand ending by dot: '" ++ dp ++ ".'"
 tokenizeOperand' (dp, rest ) = (Operand $ read dp, AP.Expression rest)
 
 tokenizeOperand'' :: String -> String -> String -> (Token, AP.Expression)
