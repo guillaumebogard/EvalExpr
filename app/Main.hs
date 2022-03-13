@@ -1,30 +1,49 @@
-module Main                   ( main ) where
+--
+-- EvalExpr
+-- File description:
+-- Main
+--
 
-import Control.Exception      ( handle )
-import System.Environment     ( getArgs )
-import System.Exit            ( ExitCode(ExitFailure)
-                              , exitWith
-                              , exitSuccess )
-import Text.Printf            ( printf )
+module Main                                             ( main ) where
 
-import Error                  ( Error(..) )
+import System.Environment                               ( getArgs )
+import System.Exit                                      ( ExitCode(ExitFailure)
+                                                        , exitWith
+                                                        , exitSuccess
+                                                        )
+import Control.Exception                                ( Handler(..)
+                                                        , catches
+                                                        )
 
-import ArgumentParser         ( Expression(..)
-                              , parseArgs )
-import ExpressionParser       ( parseExpression )
-import ExpressionTreeEvaluate ( evaluateExpressionTree )
+import qualified Argument.Parser                 as AP  ( parse )
+import qualified Expression.Parser               as EP  ( parse )
+import qualified Expression.Evaluation           as EE  ( evaluate )
+import qualified Expression.Display              as ED  ( display )
+
+import qualified Argument.Parser.Exception       as APE ( ArgumentParserException( ArgumentParserHelpException ) )
+import qualified Expression.Lexer.Exception      as ELE ( ExpressionLexerException )
+import qualified Expression.Parser.Exception     as EPE ( ExpressionParserException )
+import qualified Expression.Evaluation.Exception as EEE ( ExpressionEvaluationException )
 
 main :: IO ()
-main = handle handleError (getArgs >>= launchApp . parseArgs)
+main = (getArgs >>= launchEvalExpr) `catches` [ Handler exceptionHandlerAPE
+                                              , Handler exceptionHandlerELE
+                                              , Handler exceptionHandlerEPE
+                                              , Handler exceptionHandlerEEE
+                                              ]
 
-launchApp :: Expression -> IO ()
-launchApp = printf "%.2f\n" . evaluateExpressionTree . parseExpression 
+launchEvalExpr :: [String] -> IO ()
+launchEvalExpr = ED.display . EE.evaluate . EP.parse . AP.parse
 
-handleError :: Error -> IO ()
-handleError HelpError                           = putStrLn usage   >> exitSuccess
-handleError (ArgumentParserError       message) = putStrLn message >> exitWith (ExitFailure 84)
-handleError (InvalidExpressionError    message) = putStrLn message >> exitWith (ExitFailure 84)
-handleError (ExpressionEvaluationError message) = putStrLn message >> exitWith (ExitFailure 84)
+exceptionHandlerAPE :: APE.ArgumentParserException -> IO ()
+exceptionHandlerAPE APE.ArgumentParserHelpException = print APE.ArgumentParserHelpException >> exitSuccess
+exceptionHandlerAPE exception                       = print exception                       >> exitWith (ExitFailure 84)
 
-usage :: String
-usage = "USAGE: ./funEvalExpr expression\n\n\texpression\tA mathematical expression to be evaluated"
+exceptionHandlerELE :: ELE.ExpressionLexerException -> IO ()
+exceptionHandlerELE exception                       = print exception                       >> exitWith (ExitFailure 84)
+
+exceptionHandlerEPE :: EPE.ExpressionParserException -> IO ()
+exceptionHandlerEPE exception                       = print exception                       >> exitWith (ExitFailure 84)
+
+exceptionHandlerEEE :: EEE.ExpressionEvaluationException -> IO ()
+exceptionHandlerEEE exception                       = print exception                       >> exitWith (ExitFailure 84)

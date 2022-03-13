@@ -1,5 +1,4 @@
 ##
-## EPITECH PROJECT, 2021
 ## EvalExpr
 ## File description:
 ## Makefile
@@ -38,7 +37,3 @@ re::	all
 tests_run:
 	stack test --coverage
 .PHONY:	tests_run
-
-coverage:
-	firefox $(COVERAGE_PATH)/index.html
-.PHONY:	coverage
