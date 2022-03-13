@@ -40,10 +40,10 @@ exceptionHandlerAPE APE.ArgumentParserHelpException = print APE.ArgumentParserHe
 exceptionHandlerAPE exception                       = print exception                       >> exitWith (ExitFailure 84)
 
 exceptionHandlerELE :: ELE.ExpressionLexerException -> IO ()
-exceptionHandlerELE exception                       = print exception                       >> exitWith (ExitFailure 84)
+exceptionHandlerELE                                 = flip (>>) (exitWith (ExitFailure 84)) . print
 
 exceptionHandlerEPE :: EPE.ExpressionParserException -> IO ()
-exceptionHandlerEPE exception                       = print exception                       >> exitWith (ExitFailure 84)
+exceptionHandlerEPE                                 = flip (>>) (exitWith (ExitFailure 84)) . print
 
 exceptionHandlerEEE :: EEE.ExpressionEvaluationException -> IO ()
-exceptionHandlerEEE exception                       = print exception                       >> exitWith (ExitFailure 84)
+exceptionHandlerEEE                                 = flip (>>) (exitWith (ExitFailure 84)) . print

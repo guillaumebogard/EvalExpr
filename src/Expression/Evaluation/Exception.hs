@@ -6,14 +6,14 @@
 
 module Expression.Evaluation.Exception ( ExpressionEvaluationException(..) ) where
 
-import GHC.Exception                   ( Exception )
+import qualified GHC.Exception as GHCE ( Exception )
 
 
 newtype ExpressionEvaluationException = ExpressionEvaluationException String
     deriving Eq
 
 
-instance Exception ExpressionEvaluationException
+instance GHCE.Exception ExpressionEvaluationException
 
-instance Show      ExpressionEvaluationException where
+instance Show           ExpressionEvaluationException where
     show (ExpressionEvaluationException value) = "Expression Evaluation Exception: " ++ value ++ "."

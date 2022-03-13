@@ -4,16 +4,16 @@
 -- Expression.Parser.Exception
 --
 
-module Expression.Parser.Exception ( ExpressionParserException(..) ) where
+module Expression.Parser.Exception     ( ExpressionParserException(..) ) where
 
-import GHC.Exception               ( Exception )
+import qualified GHC.Exception as GHCE ( Exception )
 
 
 newtype ExpressionParserException = ExpressionParserException String
     deriving Eq
 
 
-instance Exception ExpressionParserException
+instance GHCE.Exception ExpressionParserException
 
-instance Show      ExpressionParserException where
+instance Show           ExpressionParserException where
     show (ExpressionParserException value) = "Expression Parser Exception: " ++ value ++ "."
