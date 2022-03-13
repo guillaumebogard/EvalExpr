@@ -4,12 +4,12 @@
 -- Spec
 --
 
-module Main                                      ( main ) where
+module Main                                       ( main ) where
 
-import qualified Test.Hspec               as TH  ( Spec
-                                                 , hspec
-                                                 , describe
-                                                 )
+import qualified Test.Hspec               as TH   ( Spec
+                                                  , hspec
+                                                  , describe
+                                                  )
 
 import qualified Argument.LexerSpec        as ALS ( spec )
 import qualified Argument.ParserSpec       as APS ( spec )
