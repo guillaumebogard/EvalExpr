@@ -4,15 +4,16 @@
 -- Expression.Lexer.Exception
 --
 
-module Expression.Lexer.Exception ( ExpressionLexerException(..) ) where
+module Expression.Lexer.Exception      ( ExpressionLexerException(..) ) where
 
-import GHC.Exception              ( Exception )
+import qualified GHC.Exception as GHCE ( Exception )
 
 
 newtype ExpressionLexerException = ExpressionLexerException String
     deriving Eq
 
-instance Exception ExpressionLexerException
 
-instance Show      ExpressionLexerException where
+instance GHCE.Exception ExpressionLexerException
+
+instance Show           ExpressionLexerException where
     show (ExpressionLexerException value) = "Expression Lexer Exception: " ++ value ++ "."
