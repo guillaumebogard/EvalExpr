@@ -2,7 +2,7 @@
 
 ![Stack CI workflow](https://github.com/guillaumebgd/EvalExpr/actions/workflows/main.yml/badge.svg)
 
-This project consists in **evaluating a mathematical expression**.
+This project consists in **evaluating a mathematical expression**.<br />
 It was realized as a student during the beginning of my **3rd year** at EPITECH.
 
 ### 🔎 In-depth
