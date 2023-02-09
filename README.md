@@ -7,20 +7,22 @@ It was realized as a student project during the beginning of my **3rd year** at 
 
 ### 🔎 In-depth
 
-The complexity behind the project doesn't come from the main problem itself but from the implementation in Haskell and constraints added by our instructor.
+The complexity behind the project doesn't come from the main problem itself but from its implementation in Haskell and constraints added by our instructor.
 
 For a bit of context with the constraints:
 
-- The project, for instance, ends up not using **that many keywords**.
+- The project, for instance, ends up not using **that many keywords**.<br />
 `do`, `case`, `if` (and others...) aren't allowed most of the time as we will end up writing imperative code instead of functional.
 
-- For *chaining function calls*, you will mostly see **the application operator** (`$`) and **the composition operator** (`.`) being used.
+- For *chaining function calls*, you will mostly see **the application operator** `$` and **the composition operator** `.` being used.
 
 - For *conditions*, you will mostly see **pattern matching** and **guards** being used.
 
 - **Majority of types** used as **parameters** and **return types** of functions are newly created types (via `type`, `newtype` or `data`) for ease of comprehension and logic throughout the program as well as rigorousness in type conversion.
 
-- Almost every type which uses `deriving` will use those derived instances in production. Usually people derive from `Eq` as it makes testing for those types easier in testing environment. Deriving from `Eq`, when it serves no purpose in the production environment, makes no sense. Therefore, it is being bypassed in testing by wrapping those types and creating an instance of `Eq` from those wrappers.
+- Almost every type which uses `deriving` will use those derived instances in production.<br />
+Usually people derive from `Eq` as it makes testing for those types easier in testing environment.<br />
+Deriving from `Eq`, when it serves no purpose in the production environment, makes no sense. Therefore, it is being bypassed in testing by wrapping those types and creating an instance of `Eq` from those wrappers.
 
 For this project specifically, we also had to create a [tree](https://en.wikipedia.org/wiki/Tree_(graph_theory)) for the expression that was given as parameter.
 
