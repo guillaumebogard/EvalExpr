@@ -7,7 +7,7 @@ It was realized as a student project during the beginning of my **3rd year** at 
 
 ### 🔎 In-depth
 
-The complexity behind it doesn't come from the main problem itself but from the implementation in Haskell and constraints added by our instructor.
+The complexity behind the project doesn't come from the main problem itself but from the implementation in Haskell and constraints added by our instructor.
 
 For a bit of context with the constraints:
 
