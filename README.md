@@ -45,21 +45,18 @@ This project has been setup with [Stack](https://docs.haskellstack.org/en/stable
 ### 🚀 Launch the project
 
 Use the newly created `funEvalExpr` binary file to launch the project.
-
 The expression to evaluate needs to be given as argument to the program as such:
 ```bash
 $ ./funEvalExpr "(3+1.5)*3"
 ```
-<br/>
+<br />
 The program outputs the result rounded down to *2 decimal places* and returns `0` upon success.
-
 For instance:
 ```bash
 $ ./funEvalExpr "(0.345+5)*(-2-1)/3"
 -5.34
 ```
-
-
+<br />
 In case of error with the given arguments (division by 0) or with the expression itself, the program shall display the error, and exit by returning `84`.
 
 ### 🖋️ Syntax
