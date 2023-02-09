@@ -7,7 +7,7 @@
 
 module Argument.Parser.Exception ( ArgumentParserException(..) ) where
 
-import GHC.Exception             ( Exception )
+import Control.Exception         ( Exception )
 
 
 data ArgumentParserException = ArgumentParserHelpException

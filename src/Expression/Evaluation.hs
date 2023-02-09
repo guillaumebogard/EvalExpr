@@ -8,7 +8,7 @@ module           Expression.Evaluation                  ( EvaluationResult(..)
                                                         , evaluate
                                                         ) where
 
-import           GHC.Exception                          ( throw )
+import           Control.Exception                      ( throw )
 
 import qualified Expression.Lexer                as EL  ( OperandType )
 import qualified Expression.Parser               as EP  ( UnaryOperator(..)

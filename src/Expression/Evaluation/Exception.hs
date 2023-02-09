@@ -7,7 +7,7 @@
 
 module Expression.Evaluation.Exception ( ExpressionEvaluationException(..) ) where
 
-import GHC.Exception                   ( Exception )
+import Control.Exception               ( Exception )
 
 
 newtype ExpressionEvaluationException = ExpressionEvaluationException String

@@ -10,7 +10,7 @@ module Expression.Parser                            ( UnaryOperator(..)
                                                     , parse
                                                     ) where
 
-import           GHC.Exception                      ( throw )
+import           Control.Exception                  ( throw )
 
 import qualified Argument.Parser             as AP  ( Expression(..) )
 import qualified Expression.Lexer            as EL  ( Token(..)

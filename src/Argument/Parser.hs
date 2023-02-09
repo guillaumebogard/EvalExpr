@@ -8,7 +8,7 @@ module           Argument.Parser                  ( Expression(..)
                                                   , parse
                                                   ) where
 
-import           GHC.Exception                    ( throw )
+import           Control.Exception                ( throw )
 
 import qualified Argument.Lexer            as AL  ( Token(..)
                                                   , tokenize

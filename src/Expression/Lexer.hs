@@ -9,7 +9,7 @@ module           Expression.Lexer                  ( Token(..)
                                                    , tokenize
                                                    ) where
 
-import           GHC.Exception                     ( throw )
+import           Control.Exception                 ( throw )
 import           Data.Char                         ( isSpace
                                                    , isDigit
                                                    )

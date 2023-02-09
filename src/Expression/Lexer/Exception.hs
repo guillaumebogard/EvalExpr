@@ -7,7 +7,7 @@
 
 module Expression.Lexer.Exception ( ExpressionLexerException(..) ) where
 
-import GHC.Exception              ( Exception )
+import Control.Exception          ( Exception )
 
 
 newtype ExpressionLexerException = ExpressionLexerException String

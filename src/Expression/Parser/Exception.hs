@@ -7,7 +7,7 @@
 
 module Expression.Parser.Exception ( ExpressionParserException(..) ) where
 
-import GHC.Exception               ( Exception )
+import Control.Exception           ( Exception )
 
 
 newtype ExpressionParserException = ExpressionParserException String
