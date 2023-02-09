@@ -31,7 +31,9 @@ Most specifically, we wrap the return of the function we are testing and wrappin
 
 - We also had to create a [tree](https://en.wikipedia.org/wiki/Tree_(graph_theory)) of the expression that was given as parameter before evaluating it for a result.
 
-### 🔨 Build the project
+### 🚀 Launch the project
+
+#### 🔨 Build
 
 This project has been setup with [Stack](https://docs.haskellstack.org/en/stable/README/) and works with a [Makefile](https://en.wikipedia.org/wiki/Make_(software)) that wraps this framework with different rules.
 
@@ -43,7 +45,7 @@ This project has been setup with [Stack](https://docs.haskellstack.org/en/stable
 | `make fclean`    | Removes all of the files created by the build.  |
 | `make re`        | Calls `make fclean` and then `make`.            |
 
-### 🚀 Launch the project
+#### 🤖 Run
 
 Use the newly created `funEvalExpr` executable to launch the project.
 The expression to evaluate needs to be given as argument to the program as such:
