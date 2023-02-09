@@ -22,7 +22,7 @@ For a bit of context with the constraints:
 
 - Almost every type which uses `deriving` will use those derived instances in production.<br />
 Usually people derive from `Eq` as it makes testing for those types easier in testing environment.<br />
-Deriving from `Eq` when it serves no purpose in the production environment makes no sense, therefore, it is being bypassed in testing by wrapping types and making those wrapping types derive from an instance of `Eq`.
+Deriving from `Eq` when it serves no purpose in the production environment makes no sense, therefore, it is being bypassed in testing environment by wrapping types and making those wrapping types derive from an instance of `Eq`.
 
 For this project specifically, we also had to create a [tree](https://en.wikipedia.org/wiki/Tree_(graph_theory)) for the expression that was given as parameter.
 
