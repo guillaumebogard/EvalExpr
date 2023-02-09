@@ -60,7 +60,7 @@ $ ./funEvalExpr "(0.345+5)*(-2-1)/3"
 ```
 <br />
 
-In case of error with the given arguments (e.g. division by 0) or with the expression itself, the program displays the error and exits by returning `84`.
+In case of error with the given arguments (e.g. division by 0) or with the expression itself, the program displays information about the error and exits by returning `84`.
 
 ### 🖋️ Syntax
 
