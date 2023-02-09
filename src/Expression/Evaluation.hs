@@ -4,19 +4,19 @@
 -- Expression.Evaluation
 --
 
-module Expression.Evaluation                             ( EvaluationResult(..)
-                                                         , evaluate
-                                                         ) where
+module           Expression.Evaluation                  ( EvaluationResult(..)
+                                                        , evaluate
+                                                        ) where
 
-import qualified GHC.Exception                   as GHCE ( throw )
+import           GHC.Exception                          ( throw )
 
-import qualified Expression.Lexer                as EL   ( OperandType )
-import qualified Expression.Parser               as EP   ( UnaryOperator(..)
-                                                         , BinaryOperator(..)
-                                                         , ExpressionTree(..)
-                                                         )
+import qualified Expression.Lexer                as EL  ( OperandType )
+import qualified Expression.Parser               as EP  ( UnaryOperator(..)
+                                                        , BinaryOperator(..)
+                                                        , ExpressionTree(..)
+                                                        )
 
-import qualified Expression.Evaluation.Exception as EEE  ( ExpressionEvaluationException( ExpressionEvaluationException ) )
+import qualified Expression.Evaluation.Exception as EEE ( ExpressionEvaluationException( ExpressionEvaluationException ) )
 
 
 newtype EvaluationResult = EvaluationResult EL.OperandType
@@ -37,5 +37,5 @@ evaluate' (EP.BinaryNode    EP.Division       left    right) =   evaluateDivisio
 evaluate' (EP.BinaryNode    EP.Power          left    right) =   evaluate' left ** evaluate' right
 
 evaluateDivision :: EL.OperandType -> EL.OperandType -> EL.OperandType
-evaluateDivision _    0     = GHCE.throw $ EEE.ExpressionEvaluationException "Forbidden operation: Division by zero"
+evaluateDivision _    0     = throw $ EEE.ExpressionEvaluationException "Forbidden operation: Division by zero"
 evaluateDivision left right = left / right

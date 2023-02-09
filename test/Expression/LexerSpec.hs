@@ -3,14 +3,15 @@
 -- File description:
 -- Expression.LexerSpec
 --
+{-# LANGUAGE InstanceSigs #-}
 
-module Expression.LexerSpec                        ( spec ) where
+module           Expression.LexerSpec              ( spec ) where
 
-import qualified Test.Hspec                 as TH  ( Spec
+import           Test.Hspec                        ( Spec
                                                    , it
                                                    , shouldThrow
                                                    )
-import qualified Control.Exception          as CE  ( evaluate )
+import           Control.Exception                 ( evaluate )
 
 import qualified Argument.Parser            as AP  ( Expression( Expression ) )
 import qualified Expression.Lexer           as EL  ( Token(..)
@@ -24,6 +25,7 @@ newtype TestToken = TestToken EL.Token
 
 
 instance Eq TestToken where
+    (==) :: TestToken -> TestToken -> Bool
     (TestToken (EL.Operand          left)) == (TestToken (EL.Operand          right)) = left == right
     (TestToken EL.Addition               ) == (TestToken EL.Addition                ) = True
     (TestToken EL.Substraction           ) == (TestToken EL.Substraction            ) = True
@@ -34,16 +36,16 @@ instance Eq TestToken where
     (TestToken EL.ClosedParenthesis      ) == (TestToken EL.ClosedParenthesis       ) = True
     _                                      == _                                       = False
 
-spec :: TH.Spec
+spec :: Spec
 spec = do
-    TH.it "Valid expression: \"1+1\"" $
+    it "Valid expression: \"1+1\"" $
         map TestToken (EL.tokenize (AP.Expression "1+1"))
             == map TestToken [
                 EL.Operand 1
               , EL.Addition
               , EL.Operand 1
             ]
-    TH.it "Valid expression: \"2*3+1\"" $
+    it "Valid expression: \"2*3+1\"" $
         map TestToken (EL.tokenize (AP.Expression "2*3+1"))
             == map TestToken [
                 EL.Operand 2
@@ -52,7 +54,7 @@ spec = do
               , EL.Addition
               , EL.Operand 1
             ]
-    TH.it "Valid expression: \"2*(3+1)\"" $
+    it "Valid expression: \"2*(3+1)\"" $
         map TestToken (EL.tokenize (AP.Expression "2*(3+1)"))
             == map TestToken [
                 EL.Operand 2
@@ -63,7 +65,7 @@ spec = do
                   , EL.Operand 1
               , EL.ClosedParenthesis
             ]
-    TH.it "Valid expression: \"(2+3)*1\"" $
+    it "Valid expression: \"(2+3)*1\"" $
         map TestToken (EL.tokenize (AP.Expression "(2+3)*1"))
             == map TestToken [
                 EL.OpenedParenthesis
@@ -74,7 +76,7 @@ spec = do
               , EL.Multiplication
               , EL.Operand 1
             ]
-    TH.it "Valid expression: \"(2+3)*(1+10/(1+1))\"" $
+    it "Valid expression: \"(2+3)*(1+10/(1+1))\"" $
         map TestToken (EL.tokenize (AP.Expression "(2+3)*(1+10/(1+1))"))
             == map TestToken [
                 EL.OpenedParenthesis
@@ -95,7 +97,7 @@ spec = do
                   , EL.ClosedParenthesis
               , EL.ClosedParenthesis
             ]
-    TH.it "Valid expression: \"(2+3)*(1+10/(1.1+1))^2.1\"" $
+    it "Valid expression: \"(2+3)*(1+10/(1.1+1))^2.1\"" $
         map TestToken (EL.tokenize (AP.Expression "(2+3)*(1+10/(1.1+1))^2.1"))
             == map TestToken [
                 EL.OpenedParenthesis
@@ -118,7 +120,7 @@ spec = do
               , EL.Power
               , EL.Operand 2.1
             ]
-    TH.it "Valid expression: \"(2+3)*(1+10/(1.1+1))^2.1/1\"" $
+    it "Valid expression: \"(2+3)*(1+10/(1.1+1))^2.1/1\"" $
         map TestToken (EL.tokenize (AP.Expression "(2+3)*(1+10/(1.1+1))^2.1/1"))
             == map TestToken [
                 EL.OpenedParenthesis
@@ -143,27 +145,27 @@ spec = do
               , EL.Division
               , EL.Operand 1
             ]
-    TH.it "Valid expression: \"1   \t\t\t  + \t 1\"" $
+    it "Valid expression: \"1   \t\t\t  + \t 1\"" $
         map TestToken (EL.tokenize (AP.Expression "1   \t\t\t  + \t 1"))
             == map TestToken [
                 EL.Operand 1
               , EL.Addition
               , EL.Operand 1
             ]
-    TH.it "Valid expression: \"1+.1\"" $
+    it "Valid expression: \"1+.1\"" $
         map TestToken (EL.tokenize (AP.Expression "1+.1"))
             == map TestToken [
                 EL.Operand 1
               , EL.Addition
               , EL.Operand 0.1
             ]
-    TH.it "Valid expression: \".1-.1\"" $
+    it "Valid expression: \".1-.1\"" $
         map TestToken (EL.tokenize (AP.Expression ".1-.1"))
             == map TestToken [
                 EL.Operand 0.1
               , EL.Substraction
               , EL.Operand 0.1
             ]
-    TH.it "Invalid expression: \"?\"" $
-        CE.evaluate (EL.tokenize (AP.Expression "?"))
-            `TH.shouldThrow` (== ELE.ExpressionLexerException "Unrecognized token: '?'")
+    it "Invalid expression: \"?\"" $
+        evaluate (EL.tokenize (AP.Expression "?"))
+            `shouldThrow` (== ELE.ExpressionLexerException "Unrecognized token: '?'")

@@ -4,14 +4,14 @@
 -- Main
 --
 
-module Main                                             ( main ) where
+module           Main                                   ( main ) where
 
-import System.Environment                               ( getArgs )
-import System.Exit                                      ( ExitCode(ExitFailure)
+import           System.Environment                     ( getArgs )
+import           System.Exit                            ( ExitCode( ExitFailure )
                                                         , exitWith
                                                         , exitSuccess
                                                         )
-import Control.Exception                                ( Handler(..)
+import           Control.Exception                      ( Handler(..)
                                                         , catches
                                                         )
 
@@ -24,6 +24,7 @@ import qualified Argument.Parser.Exception       as APE ( ArgumentParserExceptio
 import qualified Expression.Lexer.Exception      as ELE ( ExpressionLexerException )
 import qualified Expression.Parser.Exception     as EPE ( ExpressionParserException )
 import qualified Expression.Evaluation.Exception as EEE ( ExpressionEvaluationException )
+
 
 main :: IO ()
 main = (getArgs >>= launchEvalExpr) `catches` [ Handler exceptionHandlerAPE

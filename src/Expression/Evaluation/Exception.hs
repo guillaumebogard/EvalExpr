@@ -3,17 +3,19 @@
 -- File description:
 -- Expression.Evaluation.Exception
 --
+{-# LANGUAGE InstanceSigs #-}
 
 module Expression.Evaluation.Exception ( ExpressionEvaluationException(..) ) where
 
-import qualified GHC.Exception as GHCE ( Exception )
+import GHC.Exception                   ( Exception )
 
 
 newtype ExpressionEvaluationException = ExpressionEvaluationException String
     deriving Eq
 
 
-instance GHCE.Exception ExpressionEvaluationException
+instance Exception ExpressionEvaluationException
 
-instance Show           ExpressionEvaluationException where
+instance Show      ExpressionEvaluationException where
+    show :: ExpressionEvaluationException -> String
     show (ExpressionEvaluationException value) = "Expression Evaluation Exception: " ++ value ++ "."

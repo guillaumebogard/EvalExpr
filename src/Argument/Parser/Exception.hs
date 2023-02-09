@@ -3,6 +3,7 @@
 -- File description:
 -- Argument.Parser.Exception
 --
+{-# LANGUAGE InstanceSigs #-}
 
 module Argument.Parser.Exception ( ArgumentParserException(..) ) where
 
@@ -17,8 +18,10 @@ data ArgumentParserException = ArgumentParserHelpException
 instance Exception ArgumentParserException
 
 instance Show      ArgumentParserException where
+    show :: ArgumentParserException -> String
     show ArgumentParserHelpException     = usage
     show (ArgumentParserException value) = "Argument Parser Exception: " ++ value ++ "."
+
 
 usage :: String
 usage = "Usage: ./funEvalExpr expression\n"                        ++

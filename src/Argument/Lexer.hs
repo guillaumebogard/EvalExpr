@@ -8,9 +8,11 @@ module Argument.Lexer ( Token(..)
                       , tokenize
                       ) where
 
+
 data Token = Help
            | UnknownOption String
            | Expression    String
+
 
 tokenize :: [String] -> [Token]
 tokenize []               = []

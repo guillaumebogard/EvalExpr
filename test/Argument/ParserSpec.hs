@@ -3,14 +3,15 @@
 -- File description:
 -- Argument.ParserSpec
 --
+{-# LANGUAGE InstanceSigs #-}
 
-module Argument.ParserSpec                        ( spec ) where
+module           Argument.ParserSpec              ( spec ) where
 
-import qualified Test.Hspec                as TH  ( Spec
+import           Test.Hspec                       ( Spec
                                                   , it
                                                   , shouldThrow
                                                   )
-import qualified Control.Exception         as CE  ( evaluate )
+import           Control.Exception                ( evaluate )
 
 import qualified Argument.Parser           as AP  ( Expression( Expression )
                                                   , parse
@@ -26,31 +27,32 @@ newtype TestExpression = TestExpression AP.Expression
 
 
 instance Eq TestExpression where
+    (==) :: TestExpression -> TestExpression -> Bool
     (TestExpression (AP.Expression left)) == (TestExpression (AP.Expression right)) = left == right
 
-spec :: TH.Spec
+spec :: Spec
 spec = do
-    TH.it "No argument given" $
-        CE.evaluate (AP.parse [])
-            `TH.shouldThrow` (== APE.ArgumentParserException "Requires at least one expression, retry with '-h'")
-    TH.it "Multiple expressions given" $
-        CE.evaluate (AP.parse ["1+1", "2+2"])
-            `TH.shouldThrow` (== APE.ArgumentParserException "Can only take one expression")
-    TH.it "Single short help option" $
-        CE.evaluate (AP.parse ["-h"])
-            `TH.shouldThrow` (== APE.ArgumentParserHelpException)
-    TH.it "Single long help option" $
-        CE.evaluate (AP.parse ["--help"])
-            `TH.shouldThrow` (== APE.ArgumentParserHelpException)
-    TH.it "Multiple short & long help options" $
-        CE.evaluate (AP.parse ["-h", "--help"])
-            `TH.shouldThrow` (== APE.ArgumentParserHelpException)
-    TH.it "Single expression given" $
+    it "No argument given" $
+        evaluate (AP.parse [])
+            `shouldThrow` (== APE.ArgumentParserException "Requires at least one expression, retry with '-h'")
+    it "Multiple expressions given" $
+        evaluate (AP.parse ["1+1", "2+2"])
+            `shouldThrow` (== APE.ArgumentParserException "Can only take one expression")
+    it "Single short help option" $
+        evaluate (AP.parse ["-h"])
+            `shouldThrow` (== APE.ArgumentParserHelpException)
+    it "Single long help option" $
+        evaluate (AP.parse ["--help"])
+            `shouldThrow` (== APE.ArgumentParserHelpException)
+    it "Multiple short & long help options" $
+        evaluate (AP.parse ["-h", "--help"])
+            `shouldThrow` (== APE.ArgumentParserHelpException)
+    it "Single expression given" $
         TestExpression (AP.parse ["1+2"])
             == TestExpression (AP.Expression "1+2")
-    TH.it "Single expression given with short help option" $
-        CE.evaluate (AP.parse ["1+2", "-h"])
-            `TH.shouldThrow` (== APE.ArgumentParserHelpException)
-    TH.it "Single expression given with unknown option" $
-        CE.evaluate (AP.parse ["1+2", "-a"])
-            `TH.shouldThrow` (== APE.ArgumentParserException "Unknown option: '-a'")
+    it "Single expression given with short help option" $
+        evaluate (AP.parse ["1+2", "-h"])
+            `shouldThrow` (== APE.ArgumentParserHelpException)
+    it "Single expression given with unknown option" $
+        evaluate (AP.parse ["1+2", "-a"])
+            `shouldThrow` (== APE.ArgumentParserException "Unknown option: '-a'")

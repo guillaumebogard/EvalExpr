@@ -4,9 +4,9 @@
 -- Spec
 --
 
-module Main                                       ( main ) where
+module           Main                             ( main ) where
 
-import qualified Test.Hspec               as TH   ( Spec
+import           Test.Hspec                       ( Spec
                                                   , hspec
                                                   , describe
                                                   )
@@ -18,12 +18,12 @@ import qualified Expression.ParserSpec     as EPS ( spec )
 import qualified Expression.EvaluationSpec as EES ( spec )
 
 main :: IO ()
-main = TH.hspec Main.spec
+main = hspec Main.spec
 
-spec :: TH.Spec
+spec :: Spec
 spec = do
-    TH.describe "Argument.Lexer"        ALS.spec
-    TH.describe "Argument.Parser"       APS.spec
-    TH.describe "Expression.Lexer"      ELS.spec
-    TH.describe "Expression.Parser"     EPS.spec
-    TH.describe "Expression.Evaluation" EES.spec
+    describe "Argument.Lexer"        ALS.spec
+    describe "Argument.Parser"       APS.spec
+    describe "Expression.Lexer"      ELS.spec
+    describe "Expression.Parser"     EPS.spec
+    describe "Expression.Evaluation" EES.spec
