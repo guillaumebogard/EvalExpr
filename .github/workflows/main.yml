@@ -1,16 +1,57 @@
 name: build
 on:
   push:
-    branches: [ master, dev ]
+    branches: [ main, dev ]
   pull_request:
-    branches: [ master, dev ]
+    branches: [ main, dev ]
   workflow_dispatch:
 
 jobs:
-  build:
+  Ubuntu:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - build-type: Release
+          - build-type: Tests
 
-      - name: Runs tests via Makefile
-        run: make tests_run
+    steps:
+      - name: Install packages
+        run: |
+          curl -sSL https://get.haskellstack.org/ | sh
+      - uses: actions/checkout@v3
+
+      - name: Build project in release state
+        if: ${{ matrix.build-type == 'Release' }}
+        run: |
+          make
+          ./funEvalExpr -h
+      - name: Run tests
+        if: ${{ matrix.build-type == 'Tests' }}
+        run: |
+          make tests_run
+  macOS:
+    runs-on: macos-12
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - build-type: Release
+          - build-type: Tests
+
+    steps:
+      - name: Install packages
+        run: |
+          curl -sSL https://get.haskellstack.org/ | sh
+      - uses: actions/checkout@v3
+
+      - name: Build project in release state
+        if: ${{ matrix.build-type == 'Release' }}
+        run: |
+          make
+          ./funEvalExpr -h
+      - name: Run tests
+        if: ${{ matrix.build-type == 'Tests' }}
+        run: |
+          make tests_run
