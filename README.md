@@ -28,7 +28,7 @@ Inside the testing environment, where we need an instance of `Eq` for assertion 
 Most specifically, we wrap the return of the function we are testing and wrapping the component we are using for comparison. As they have matching types, everything perfectly works.
 `Exceptions` don't follow this rule because, in testing, we can't wrap the exception that was thrown.
 
-- For this project specifically, we also had to create a [tree](https://en.wikipedia.org/wiki/Tree_(graph_theory)), of the expression that was given as parameter, before evaluating for a result.
+- We also had to create a [tree](https://en.wikipedia.org/wiki/Tree_(graph_theory)), of the expression that was given as parameter, before evaluating for a result.
 
 ### 🔨 Build the project
 
