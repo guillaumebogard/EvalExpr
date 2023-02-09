@@ -11,6 +11,7 @@ import           Test.Hspec                         ( Spec
                                                     , it
                                                     , shouldThrow
                                                     )
+import           Control.Exception                  ( evaluate )
 
 import qualified Argument.Parser             as AP  ( Expression( Expression ) )
 import qualified Expression.Lexer            as EL  ( Token(..) )
@@ -20,7 +21,6 @@ import qualified Expression.Parser           as EP  ( UnaryOperator(..)
                                                     , parse
                                                     )
 
-import qualified Expression.Lexer.Exception  as ELE ( ExpressionLexerException( ExpressionLexerException ) )
 import qualified Expression.Parser.Exception as EPE ( ExpressionParserException( ExpressionParserException ) )
 
 
@@ -221,3 +221,6 @@ spec = do
                         (EP.Leaf 1)
                     )
             )
+    it "Invalid expression: \"(1+1\"" $
+        evaluate (EP.parse (AP.Expression "(1+1"))
+            `shouldThrow` (== EPE.ExpressionParserException "Mismatched parentheses")
