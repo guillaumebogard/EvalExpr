@@ -67,6 +67,10 @@ In case of error with the given arguments (e.g. division by 0) or with the expre
 
 ### 🖋️ Expression Syntax
 
+The syntax of an expression is as a mathematical expression goes.<br />
+The limits are the operators and tokens of expression this project handles (found below).<br />
+I suggest you that you use quotes (`""` or `''`) for entering an expression with parentheses `()` or spaces ` ` as those characters are often treated differently by your shell.
+
 #### Operators
 
 The different operators the program understands are the followings:
