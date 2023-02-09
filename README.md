@@ -20,7 +20,9 @@ For a bit of context with the constraints:
 
 - **Majority of types** used as **parameters** and **return types** of functions are newly created types (via `type`, `newtype` or `data`) for ease of comprehension and logic throughout the program as well as rigorousness in type conversion.
 
-- Almost every type which uses `deriving` will use those derived instances in production. Usually people derive from `Eq` as it makes testing for those types easier in testing environment. Deriving from `Eq`, when it serves no purpose in the production environment, makes no sense. Therefore, it is being bypassed in testing by wrapping those types and creating an instance of `Eq` from those wrappers. 
+- Almost every type which uses `deriving` will use those derived instances in production. Usually people derive from `Eq` as it makes testing for those types easier in testing environment. Deriving from `Eq`, when it serves no purpose in the production environment, makes no sense. Therefore, it is being bypassed in testing by wrapping those types and creating an instance of `Eq` from those wrappers.
+
+For this project specifically, we also had to create a [tree](https://en.wikipedia.org/wiki/Tree_(graph_theory)) for the expression that was given as parameter.
 
 ### 🔨 Build the project
 
