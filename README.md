@@ -26,7 +26,7 @@ Deriving from `Eq` when it serves no purpose in the production environment makes
 Therefore, we try to reduce this bad habit as much as we can with the tools we are given.<br />
 Inside the testing environment, where we need an instance of `Eq` for assertion checking, it is being bypassed by wrapping those types inside wrapping types and making them derive from their own instance of `Eq`.<br />
 Most specifically, we wrap the return of the function we are testing and wrapping the component we are using for comparison. As they have matching types, everything perfectly works.<br />
-`Exceptions` don't follow this rule because, in testing, we can't wrap the exception that was thrown.
+`Exceptions` don't follow this rule because, in testing, as we can't wrap the exception that was thrown.
 
 - We also had to create a [tree](https://en.wikipedia.org/wiki/Tree_(graph_theory)), of the expression that was given as parameter, before evaluating for a result.
 
