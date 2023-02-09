@@ -21,9 +21,12 @@ For a bit of context with the constraints:
 - **Majority of types** used as **parameters** and **return types** of functions are newly created types (via `type`, `newtype` or `data`) for ease of comprehension and logic throughout the program as well as rigorousness in type conversion.
 
 - Almost every type which uses `deriving` will use those derived instances in production.<br />
-Usually people derive from `Eq` as it makes testing for those types easier in testing environment.<br />
-Deriving from `Eq` when it serves no purpose in the production environment makes no sense.
+A common example of a bad habit is that usually people derive from `Eq` as it makes testing for those types easier in testing environment.<br />
+Deriving from `Eq` when it serves no purpose in the production environment makes no sense and also adds unreacheable code for coverage.
+Therefore, we try to reduce that bad habit as much as we can with the tools that we are given.
 Inside the testing environment, where we need an instance of `Eq` for assertion checking, it is being bypassed by wrapping those types inside wrapping types and making them derive from their own instance of `Eq`.
+Most specifically, we wrap the return of the function we are testing and wrapping the component we are using for comparison. As they have matching types, everything perfectly works.
+`Exceptions` don't follow that rule because, in testing, we can't wrap the exception that was thrown.
 
 For this project specifically, we also had to create a [tree](https://en.wikipedia.org/wiki/Tree_(graph_theory)) for the expression that was given as parameter.
 
