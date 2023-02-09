@@ -17,9 +17,6 @@ jobs:
           - build-type: Tests
 
     steps:
-      - name: Install packages
-        run: |
-          curl -sSL https://get.haskellstack.org/ | sh
       - uses: actions/checkout@v3
 
       - name: Build project in release state
@@ -41,9 +38,6 @@ jobs:
           - build-type: Tests
 
     steps:
-      - name: Install packages
-        run: |
-          curl -sSL https://get.haskellstack.org/ | sh
       - uses: actions/checkout@v3
 
       - name: Build project in release state
