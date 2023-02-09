@@ -1,6 +1,7 @@
 # 🟣 EvalExpr
 
-![Stack CI workflow](https://github.com/guillaumebgd/EvalExpr/actions/workflows/main.yml/badge.svg)
+![Build](https://github.com/guillaumebgd/EvalExpr/actions/workflows/build.yml/badge.svg)
+![Tests](https://github.com/guillaumebgd/EvalExpr/actions/workflows/tests.yml/badge.svg)
 
 This project consists in **evaluating a mathematical expression**.<br />
 It was realized as a student project during the beginning of my **3rd year** at EPITECH.
