@@ -11,7 +11,7 @@ The complexity behind the project doesn't come from the main problem itself but 
 
 For a bit of context with the constraints:
 
-- The project, for instance, ends up not using **that many keywords**.<br />
+- The project ends up not using **that many keywords**.<br />
 `do`, `case`, `if` (and others...) aren't allowed most of the time as we will end up writing imperative code instead of functional.
 
 - For *chaining function calls*, you will mostly see **the application operator** `$` and **the composition operator** `.` being used.
