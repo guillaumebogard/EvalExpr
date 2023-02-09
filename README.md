@@ -44,7 +44,7 @@ This project has been setup with [Stack](https://docs.haskellstack.org/en/stable
 
 ### 🚀 Launch the project
 
-Use the newly created `funEvalExpr` binary file to launch the project.
+Use the newly created `funEvalExpr` executable to launch the project.
 The expression to evaluate needs to be given as argument to the program as such:
 
 ```bash
