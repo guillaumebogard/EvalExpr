@@ -3,6 +3,7 @@
 -- File description:
 -- Expression.Lexer.Exception
 --
+
 {-# LANGUAGE InstanceSigs #-}
 
 module Expression.Lexer.Exception ( ExpressionLexerException(..) ) where
@@ -12,7 +13,6 @@ import Control.Exception          ( Exception )
 
 newtype ExpressionLexerException = ExpressionLexerException String
     deriving Eq
-
 
 instance Exception ExpressionLexerException
 

@@ -3,6 +3,7 @@
 -- File description:
 -- Argument.Parser.Exception
 --
+
 {-# LANGUAGE InstanceSigs #-}
 
 module Argument.Parser.Exception ( ArgumentParserException(..) ) where
@@ -13,7 +14,6 @@ import Control.Exception         ( Exception )
 data ArgumentParserException = ArgumentParserHelpException
                              | ArgumentParserException     String
     deriving Eq
-
 
 instance Exception ArgumentParserException
 

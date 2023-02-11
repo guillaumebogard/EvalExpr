@@ -3,6 +3,7 @@
 -- File description:
 -- Expression.EvaluationSpec
 --
+
 {-# LANGUAGE InstanceSigs #-}
 
 module           Expression.EvaluationSpec              ( spec ) where
@@ -26,7 +27,6 @@ import qualified Expression.Evaluation.Exception as EEE ( ExpressionEvaluationEx
 
 
 newtype TestEvaluationResult = TestEvaluationResult EE.EvaluationResult
-
 
 instance Eq TestEvaluationResult where
     (==) :: TestEvaluationResult -> TestEvaluationResult -> Bool

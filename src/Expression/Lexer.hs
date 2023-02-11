@@ -21,14 +21,14 @@ import qualified Expression.Lexer.Exception as ELE ( ExpressionLexerException( E
 
 type OperandType = Double
 
-data Token = Operand           OperandType -- 10 | 10.1 | .01
-           | Addition                      -- '+'
-           | Substraction                  -- '-'
-           | Multiplication                -- '*'
-           | Division                      -- '/'
-           | Power                         -- '^'
-           | OpenedParenthesis             -- '('
-           | ClosedParenthesis             -- ')'
+data Token = Operand           OperandType
+           | Addition
+           | Substraction
+           | Multiplication
+           | Division
+           | Power
+           | OpenedParenthesis
+           | ClosedParenthesis
 
 
 tokenize :: AP.Expression -> [Token]

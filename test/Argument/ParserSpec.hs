@@ -3,6 +3,7 @@
 -- File description:
 -- Argument.ParserSpec
 --
+
 {-# LANGUAGE InstanceSigs #-}
 
 module           Argument.ParserSpec              ( spec ) where
@@ -24,7 +25,6 @@ import qualified Argument.Parser.Exception as APE ( ArgumentParserException( Arg
 
 
 newtype TestExpression = TestExpression AP.Expression
-
 
 instance Eq TestExpression where
     (==) :: TestExpression -> TestExpression -> Bool

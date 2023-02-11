@@ -3,6 +3,7 @@
 -- File description:
 -- Expression.Parser.Exception
 --
+
 {-# LANGUAGE InstanceSigs #-}
 
 module Expression.Parser.Exception ( ExpressionParserException(..) ) where

@@ -3,6 +3,7 @@
 -- File description:
 -- Expression.Evaluation.Exception
 --
+
 {-# LANGUAGE InstanceSigs #-}
 
 module Expression.Evaluation.Exception ( ExpressionEvaluationException(..) ) where
@@ -12,7 +13,6 @@ import Control.Exception               ( Exception )
 
 newtype ExpressionEvaluationException = ExpressionEvaluationException String
     deriving Eq
-
 
 instance Exception ExpressionEvaluationException
 

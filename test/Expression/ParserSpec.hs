@@ -3,6 +3,7 @@
 -- File description:
 -- Expression.ParserSpec
 --
+
 {-# LANGUAGE InstanceSigs #-}
 
 module           Expression.ParserSpec              ( spec ) where
@@ -26,7 +27,6 @@ import qualified Expression.Parser.Exception as EPE ( ExpressionParserException(
 
 newtype TestUnaryOperator = TestUnaryOperator EP.UnaryOperator
 
-
 instance Eq TestUnaryOperator where
     (==) :: TestUnaryOperator -> TestUnaryOperator -> Bool
     (TestUnaryOperator EP.Plus ) == (TestUnaryOperator EP.Plus ) = True
@@ -35,7 +35,6 @@ instance Eq TestUnaryOperator where
 
 
 newtype TestBinaryOperator = TestBinaryOperator EP.BinaryOperator
-
 
 instance Eq TestBinaryOperator where
     (==) :: TestBinaryOperator -> TestBinaryOperator -> Bool
@@ -48,7 +47,6 @@ instance Eq TestBinaryOperator where
 
 
 newtype TestExpressionTree = TestExpressionTree EP.ExpressionTree
-
 
 instance Eq TestExpressionTree where
     (==) :: TestExpressionTree -> TestExpressionTree -> Bool

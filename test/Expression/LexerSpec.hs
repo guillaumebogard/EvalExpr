@@ -3,6 +3,7 @@
 -- File description:
 -- Expression.LexerSpec
 --
+
 {-# LANGUAGE InstanceSigs #-}
 
 module           Expression.LexerSpec              ( spec ) where
@@ -22,7 +23,6 @@ import qualified Expression.Lexer.Exception as ELE ( ExpressionLexerException( E
 
 
 newtype TestToken = TestToken EL.Token
-
 
 instance Eq TestToken where
     (==) :: TestToken -> TestToken -> Bool

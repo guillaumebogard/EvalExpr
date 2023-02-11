@@ -3,6 +3,7 @@
 -- File description:
 -- Argument.LexerSpec
 --
+
 {-# LANGUAGE InstanceSigs #-}
 
 module           Argument.LexerSpec   ( spec ) where
@@ -17,7 +18,6 @@ import qualified Argument.Lexer as AL ( Token(..)
 
 
 newtype TestToken = TestToken AL.Token
-
 
 instance Eq TestToken where
     (==) :: TestToken -> TestToken -> Bool

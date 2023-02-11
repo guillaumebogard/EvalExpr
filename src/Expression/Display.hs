@@ -4,7 +4,7 @@
 -- Expression.Display
 --
 
-module Expression.Display                    ( display ) where
+module           Expression.Display          ( display ) where
 
 import           Text.Printf                 ( printf )
 
